@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ogre Adventure</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+</head>
+<body>
+  <div id="menu" class="fullscreen">
+    <img src="assets/menu_screen.png" alt="Menu Principal" class="fullscreen-img" />
+    <button onclick="startGame()">Jugar</button>
+    <button onclick="showInstructions()">Instrucciones</button>
+  </div>
+
+  <div id="instructions" class="fullscreen hidden">
+    <h2>Instrucciones</h2>
+    <p>
+      🧌 Usa la tecla <b>ESPACIO</b> para saltar (doble salto permitido).<br />
+      🧅 Recoge cebollas para ganar puntos.<br />
+      💥 Evita los obstáculos.<br />
+      🎮 Flechas izquierda/derecha para moverte, ↑ para acelerar, ↓ para deslizarte.<br />
+      ❤️ Tienes 3 vidas. Cada 10 puntos subes de nivel.
+    </p>
+    <button onclick="backToMenu()">Volver</button>
+  </div>
+
+  <div id="gameContainer" class="fullscreen hidden"></div>
+
+  <div id="gameOverScreen" class="fullscreen hidden">
+    <h1>¡GAME OVER!</h1>
+    <p id="finalScore">Puntos: 0</p>
+    <button onclick="restartGame()">Reiniciar</button>
+  </div>
+
+  <script src="js/game.js"></script>
+  <script>
+    let currentGame;
+
+    function startGame() {
+      hideAll();
+      document.getElementById("gameContainer").style.display = "block";
+      currentGame = startPhaserGame();
+    }
+
+    function showInstructions() {
+      hideAll();
+      document.getElementById("instructions").style.display = "block";
+    }
+
+    function backToMenu() {
+      hideAll();
+      document.getElementById("menu").style.display = "block";
+    }
+
+    function restartGame() {
+      document.getElementById("gameOverScreen").style.display = "none";
+      startGame();
+    }
+
+    function hideAll() {
+      document.querySelectorAll(".fullscreen").forEach(el => el.style.display = "none");
+    }
+  </script>
+</body>
+</html>

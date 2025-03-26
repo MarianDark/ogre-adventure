@@ -1,0 +1,19 @@
+ogre-adventure/
+│
+├── index.html              ← Código principal del juego
+├── js/
+│   └── game.js             ← Lógica del juego con Phaser
+├── assets/
+│   ├── bg_swamp.png
+│   ├── ground.png
+│   ├── ogre_sprite.png
+│   ├── log.png
+│   ├── onion.png
+│   ├── jump.mp3
+│   ├── hit.mp3
+│   ├── collect.mp3
+│   ├── music_fast.mp3
+│   └── particle_green.png
+├── css/
+│   └── style.css           ← Estilos si los necesitas
+└── README.md
