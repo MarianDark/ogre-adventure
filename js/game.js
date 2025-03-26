@@ -12,8 +12,12 @@ function startPhaserGame() {
 
   const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 450,
+    scale: {
+      mode: Phaser.Scale.RESIZE,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      width: '100%',
+      height: '100%'
+    },
     parent: 'gameContainer',
     physics: {
       default: 'arcade',
@@ -29,7 +33,11 @@ function preload() {
   this.load.image('bg', 'assets/game_background.png');
   this.load.image('obstacle', 'assets/log.png');
   this.load.image('onion', 'assets/onion.png');
-  this.load.spritesheet('ogre', 'assets/ogre_spritesheet.png', { frameWidth: 64, frameHeight: 64 });
+
+  this.load.image('ogre_idle', 'assets/ogre_idle.png');
+  this.load.image('ogre_run', 'assets/ogre_run.png');
+  this.load.image('ogre_slide', 'assets/ogre_slide.png');
+  this.load.image('ogre_jump', 'assets/ogre_jump.png');
 
   this.load.audio('jump', 'assets/jump.mp3');
   this.load.audio('hit', 'assets/hit.mp3');
@@ -38,18 +46,11 @@ function preload() {
 }
 
 function create() {
-  this.add.image(400, 225, 'bg');
+  this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(this.scale.width, this.scale.height);
 
-  player = this.physics.add.sprite(100, 300, 'ogre').setScale(1);
+  player = this.physics.add.sprite(100, 300, 'ogre_idle');
   player.setCollideWorldBounds(true);
-
-  this.anims.create({
-    key: 'run',
-    frames: this.anims.generateFrameNumbers('ogre', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
-  player.anims.play('run', true);
+  player.setScale(0.4);
 
   cursors = this.input.keyboard.createCursorKeys();
   this.input.keyboard.on('keydown-SPACE', jumpHandler);
@@ -80,11 +81,14 @@ function update() {
   if (cursors.left.isDown) {
     player.setVelocityX(-160);
     player.flipX = true;
+    player.setTexture('ogre_idle');
   } else if (cursors.right.isDown) {
     player.setVelocityX(160);
     player.flipX = false;
+    player.setTexture('ogre_run');
   } else {
     player.setVelocityX(0);
+    player.setTexture('ogre_idle');
   }
 
   if (cursors.up.isDown && !player.body.touching.down) {
@@ -92,11 +96,14 @@ function update() {
   }
 
   if (cursors.down.isDown && !slideTimer) {
-    player.setScale(1, 0.5);
+    player.setTexture('ogre_slide');
+    player.setScale(0.35, 0.2);
     slideTimer = setTimeout(() => {
-      player.setScale(1, 1);
+      player.setScale(0.4, 0.4);
       slideTimer = null;
     }, 400);
+  } else if (!player.body.touching.down) {
+    player.setTexture('ogre_jump');
   }
 
   Phaser.Actions.IncX(obstacles.getChildren(), -5 - level);
@@ -138,9 +145,7 @@ function hitObstacle(player, obstacle) {
   if (lives <= 0) {
     this.physics.pause();
     player.setTint(0xff0000);
-    player.anims.stop();
     music.stop();
-
     document.getElementById("finalScore").innerText = "Puntos: " + score;
     document.getElementById("gameOverScreen").style.display = "flex";
   }
