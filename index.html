@@ -28,7 +28,6 @@
 
   <div id="gameContainer" class="fullscreen hidden">
     <button id="muteButton" onclick="toggleMusic()">🔊 Mute</button>
-
   </div>
 
   <div id="gameOverScreen" class="fullscreen hidden">
@@ -44,6 +43,7 @@
     function startGame() {
       hideAll();
       document.getElementById("gameContainer").style.display = "block";
+      document.getElementById("muteButton").style.display = "block";
       currentGame = startPhaserGame();
     }
 
@@ -59,6 +59,9 @@
 
     function restartGame() {
       document.getElementById("gameOverScreen").style.display = "none";
+      if (currentGame) {
+        currentGame.destroy(true);
+      }
       startGame();
     }
 

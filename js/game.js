@@ -6,14 +6,11 @@ let jumpCount = 0;
 let slideTimer = null;
 let isMuted = false;
 
-
 function toggleMusic() {
   isMuted = !isMuted;
   if (music) {
     music.setMute(isMuted);
   }
-
-  // Cambia ícono visual
   const btn = document.getElementById('muteButton');
   btn.textContent = isMuted ? "🔇 Unmute" : "🔊 Mute";
 }
@@ -55,13 +52,13 @@ function preload() {
   this.load.audio('jump', 'assets/jump.mp3');
   this.load.audio('hit', 'assets/hit.mp3');
   this.load.audio('collect', 'assets/collect.mp3');
-  this.load.audio('music', 'assets/music_fast.mp3');
+  this.load.audio('music', 'assets/music_fast.mp3'); // Puedes usar ogre_theme_soft_v2.mp3 si prefieres
 }
 
 function create() {
   this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(this.scale.width, this.scale.height);
 
-  player = this.physics.add.sprite(100, 380, 'ogre_idle'); // posición a ras del suelo
+  player = this.physics.add.sprite(100, this.scale.height - 90, 'ogre_idle');
   player.setCollideWorldBounds(true);
   player.setScale(0.4);
 
@@ -73,6 +70,7 @@ function create() {
   collectSound = this.sound.add('collect');
   music = this.sound.add('music', { loop: true, volume: 0.5 });
   music.play();
+  music.setMute(isMuted);
 
   obstacles = this.physics.add.group();
   onions = this.physics.add.group();
@@ -91,11 +89,10 @@ function create() {
 function update() {
   if (player.body.onFloor()) jumpCount = 0;
 
-  // Movimiento lateral
   if (cursors.left.isDown) {
     player.setVelocityX(-500);
     player.flipX = true;
-    player.setTexture('ogre_idle'); // puedes cambiar esto por otra imagen si quieres caminar hacia atrás
+    player.setTexture('ogre_idle'); // Puedes usar otra imagen para caminar hacia atrás
   } else if (cursors.right.isDown) {
     player.setVelocityX(500);
     player.flipX = false;
@@ -105,12 +102,10 @@ function update() {
     player.setTexture('ogre_idle');
   }
 
-  // Aceleración en el aire
   if (cursors.up.isDown && !player.body.touching.down) {
     player.setVelocityX(player.flipX ? -600 : 600);
   }
 
-  // Slide
   if (cursors.down.isDown && !slideTimer) {
     player.setTexture('ogre_slide');
     player.setScale(0.35, 0.2);
@@ -135,18 +130,17 @@ function jumpHandler() {
 }
 
 function spawnObstacle() {
-  const yGround = this.scale.height - 70;
+  const yGround = player.y;
   const obst = obstacles.create(850, yGround, 'obstacle').setScale(0.15);
   obst.setImmovable(true);
   obst.body.allowGravity = false;
 }
 
 function spawnOnion() {
-  const yGround = this.scale.height - 70; // Ajusta "70" según el tamaño de tu imagen de onion
+  const yGround = player.y;
   const onion = onions.create(850, yGround, 'onion').setScale(0.15);
   onion.body.allowGravity = false;
 }
-
 
 function collectOnion(player, onion) {
   collectSound.play();
@@ -167,6 +161,8 @@ function hitObstacle(player, obstacle) {
     music.stop();
     document.getElementById("finalScore").innerText = "Puntos: " + score;
     document.getElementById("gameOverScreen").style.display = "flex";
+    document.getElementById("muteButton").style.display = "none";
+
   }
 }
 
