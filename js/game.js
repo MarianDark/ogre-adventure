@@ -5,6 +5,22 @@ let scoreText, levelText, livesText;
 let jumpCount = 0;
 let slideTimer = null;
 let isMuted = false;
+let isPaused = false;
+
+function togglePause() {
+  isPaused = !isPaused;
+  const btn = document.getElementById("pauseButton");
+
+  if (isPaused) {
+    player.scene.physics.pause();
+    music.pause();
+    btn.textContent = "▶️ Resume";
+  } else {
+    player.scene.physics.resume();
+    music.resume();
+    btn.textContent = "⏸️ Pause";
+  }
+}
 
 function toggleMusic() {
   isMuted = !isMuted;
@@ -52,7 +68,7 @@ function preload() {
   this.load.audio('jump', 'assets/jump.mp3');
   this.load.audio('hit', 'assets/hit.mp3');
   this.load.audio('collect', 'assets/collect.mp3');
-  this.load.audio('music', 'assets/music_fast.mp3'); // Puedes usar ogre_theme_soft_v2.mp3 si prefieres
+  this.load.audio('music', 'assets/music_fast.mp3');
 }
 
 function create() {
@@ -75,15 +91,15 @@ function create() {
   obstacles = this.physics.add.group();
   onions = this.physics.add.group();
 
-  this.time.addEvent({ delay: 7000, callback: spawnObstacle, callbackScope: this, loop: true });
+  this.time.addEvent({ delay: 5000, callback: spawnObstacle, callbackScope: this, loop: true });
   this.time.addEvent({ delay: 4000, callback: spawnOnion, callbackScope: this, loop: true });
 
   this.physics.add.collider(player, obstacles, hitObstacle, null, this);
   this.physics.add.overlap(player, onions, collectOnion, null, this);
 
-  scoreText = this.add.text(16, 16, 'Puntos: 0', { fontSize: '20px', fill: '#fff' });
-  levelText = this.add.text(16, 40, 'Nivel: 1', { fontSize: '20px', fill: '#fff' });
-  livesText = this.add.text(16, 64, 'Vidas: 3', { fontSize: '20px', fill: '#fff' });
+  scoreText = this.add.text(16, 16, 'Puntos: 0', { fontSize: '30px', fill: '#fff' });
+  levelText = this.add.text(16, 40, 'Nivel: 1', { fontSize: '30px', fill: '#fff' });
+  livesText = this.add.text(16, 64, 'Vidas: 3', { fontSize: '30px', fill: '#fff' });
 }
 
 function update() {
@@ -92,30 +108,41 @@ function update() {
   if (cursors.left.isDown) {
     player.setVelocityX(-500);
     player.flipX = true;
-    player.setTexture('ogre_idle'); // Puedes usar otra imagen para caminar hacia atrás
   } else if (cursors.right.isDown) {
     player.setVelocityX(500);
     player.flipX = false;
-    player.setTexture('ogre_run');
   } else {
     player.setVelocityX(0);
-    player.setTexture('ogre_idle');
   }
 
   if (cursors.up.isDown && !player.body.touching.down) {
     player.setVelocityX(player.flipX ? -600 : 600);
   }
 
+  // Textura y escala según estado
+  let newTexture = 'ogre_idle';
+  let newScale = 0.4;
+
   if (cursors.down.isDown && !slideTimer) {
-    player.setTexture('ogre_slide');
-    player.setScale(0.35, 0.2);
+    newTexture = 'ogre_slide';
+    newScale = 0.3;
     slideTimer = setTimeout(() => {
-      player.setScale(0.4);
       slideTimer = null;
     }, 400);
-  } else if (!player.body.touching.down) {
-    player.setTexture('ogre_jump');
+  } else if (slideTimer) {
+    newTexture = 'ogre_slide';
+    newScale = 0.3;
+  } else if (!player.body.onFloor()) {
+    newTexture = 'ogre_jump';
+  } else if (cursors.left.isDown || cursors.right.isDown) {
+    newTexture = 'ogre_run';
   }
+
+  if (player.texture.key !== newTexture) {
+    player.setTexture(newTexture);
+  }
+
+  player.setScale(newScale);
 
   Phaser.Actions.IncX(obstacles.getChildren(), -6 - level);
   Phaser.Actions.IncX(onions.getChildren(), -6 - level);
@@ -162,7 +189,6 @@ function hitObstacle(player, obstacle) {
     document.getElementById("finalScore").innerText = "Puntos: " + score;
     document.getElementById("gameOverScreen").style.display = "flex";
     document.getElementById("muteButton").style.display = "none";
-
   }
 }
 
