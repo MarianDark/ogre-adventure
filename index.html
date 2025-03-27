@@ -5,30 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ogre Adventure</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 </head>
 <body>
   <div id="menu" class="fullscreen">
     <img src="assets/menu_screen.png" alt="Menu Principal" class="fullscreen-img" />
-    <button onclick="startGame()">Jugar</button>
-    <button onclick="showInstructions()">Instrucciones</button>
+    <div class="menu-buttons">
+      <button onclick="startGame()">Jugar</button>
+      <button onclick="showInstructions()">Instrucciones</button>
+    </div>
   </div>
 
   <div id="instructions" class="fullscreen hidden">
-    <h2>Instrucciones</h2>
-    <p>
-      🧌 Usa la tecla <b>ESPACIO</b> para saltar (doble salto permitido).<br />
+    <h1>Instrucciones</h1>
+    <h1>
+      🔝Usa la tecla <b>ESPACIO</b> para saltar (doble salto permitido).<br />
       🧅 Recoge cebollas para ganar puntos.<br />
       💥 Evita los obstáculos.<br />
       🎮 Flechas izquierda/derecha para moverte, ↑ para acelerar, ↓ para deslizarte.<br />
       ❤️ Tienes 3 vidas. Cada 10 puntos subes de nivel.
-    </p>
+    </h1>
     <button onclick="backToMenu()">Volver</button>
   </div>
 
   <div id="gameContainer" class="fullscreen hidden">
-    <button id="muteButton" onclick="toggleMusic()">🔊 Mute</button>
-    <button id="pauseButton" onclick="togglePause()">⏸️ Pause</button>
+    <button id="muteButton" onclick="toggleMusic()">🔊</button>
+    <button id="pauseButton" onclick="togglePause()">⏸️</button>
   </div>
 
   <div id="gameOverScreen" class="fullscreen hidden">

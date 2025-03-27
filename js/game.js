@@ -14,11 +14,11 @@ function togglePause() {
   if (isPaused) {
     player.scene.physics.pause();
     music.pause();
-    btn.textContent = "▶️ Resume";
+    btn.textContent = "▶️";
   } else {
     player.scene.physics.resume();
     music.resume();
-    btn.textContent = "⏸️ Pause";
+    btn.textContent = "⏸️";
   }
 }
 
@@ -28,7 +28,7 @@ function toggleMusic() {
     music.setMute(isMuted);
   }
   const btn = document.getElementById('muteButton');
-  btn.textContent = isMuted ? "🔇 Unmute" : "🔊 Mute";
+  btn.textContent = isMuted ? "🔇" : "🔊";
 }
 
 function startPhaserGame() {
@@ -97,9 +97,29 @@ function create() {
   this.physics.add.collider(player, obstacles, hitObstacle, null, this);
   this.physics.add.overlap(player, onions, collectOnion, null, this);
 
-  scoreText = this.add.text(16, 16, 'Puntos: 0', { fontSize: '30px', fill: '#fff' });
-  levelText = this.add.text(16, 40, 'Nivel: 1', { fontSize: '30px', fill: '#fff' });
-  livesText = this.add.text(16, 64, 'Vidas: 3', { fontSize: '30px', fill: '#fff' });
+  scoreText = this.add.text(16, 16, 'Puntos: 0', {
+    fontFamily: 'Caveat Brush',
+    fontSize: '50px',
+    fill: '#fff',
+    stroke: '#000',
+    strokeThickness: 4
+  });
+  
+  levelText = this.add.text(16, 66, 'Nivel: 1', {
+    fontFamily: 'Caveat Brush',
+    fontSize: '50px',
+    fill: '#fff',
+    stroke: '#000',
+    strokeThickness: 4
+  });
+  
+  livesText = this.add.text(16, 116, 'Vidas: 3', {
+    fontFamily: 'Caveat Brush',
+    fontSize: '50px',
+    fill: '#fff',
+    stroke: '#000',
+    strokeThickness: 4
+  });  
 }
 
 function update() {

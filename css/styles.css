@@ -1,20 +1,42 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Caveat Brush', cursive;
   background-color: #000;
   color: white;
   text-align: center;
+  overflow: hidden;
+}
+
+.menu-buttons {
+  position: absolute;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 }
 
 button {
   padding: 10px 20px;
-  margin: 10px;
-  font-size: 18px;
-  border: none;
-  background-color: #f90;
-  color: #000;
+  margin: 20px;
+  font-size: 6vw;
+  font-family: 'Caveat Brush', cursive;
+  background-color: #0b8109;
+  color: #080808;
+  border: 3px solid #080808;
+  border-radius: 12px;
   cursor: pointer;
-  border-radius: 8px;
+  transition: 0.3s;
+  z-index: 2;
+  position: relative;
+}
+
+button:hover {
+  background-color: #7cee0b;
+  transform: scale(1.05);
 }
 
 .fullscreen {
@@ -23,20 +45,28 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 5vh;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .fullscreen-img {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill; 
+  z-index: 1;
 }
+
 
 .hidden {
   display: none;
 }
+
 #gameOverScreen {
   position: absolute;
   top: 0;
@@ -53,14 +83,20 @@ button {
 }
 
 #gameOverScreen h1 {
-  font-size: 48px;
+  font-size: 10vw;
   margin-bottom: 20px;
 }
 
-#gameOverScreen button {
-  font-size: 20px;
-  padding: 12px 24px;
+#gameOverScreen p {
+  font-size: 6vw;
+  margin: 10px 0;
 }
+
+#gameOverScreen button {
+  font-size: 5vw;
+  padding: 10px 20px;
+}
+
 #muteButton {
   position: absolute;
   top: 10px;
@@ -69,21 +105,52 @@ button {
   background-color: rgba(255, 255, 255, 0.9);
   color: #000;
   border: none;
-  font-size: 18px;
+  font-size: 4vw;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
 }
+
 #pauseButton {
   position: absolute;
   top: 10px;
-  right: 900px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
   background-color: rgba(255, 255, 255, 0.9);
   color: #000;
   border: none;
-  font-size: 18px;
+  font-size: 4vw;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
 }
+
+@media (min-width: 768px) {
+  button {
+    font-size: 30px;
+  }
+
+  #gameOverScreen h1 {
+    font-size: 48px;
+  }
+
+  #gameOverScreen p {
+    font-size: 24px;
+  }
+
+  #gameOverScreen button {
+    font-size: 20px;
+  }
+
+  #muteButton {
+    font-size: 18px;
+  }
+
+  #pauseButton {
+    font-size: 18px;
+    padding: 6px 14px;
+    min-width: 70px;
+  }
+}
+
